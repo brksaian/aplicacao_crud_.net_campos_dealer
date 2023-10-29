@@ -1,0 +1,37 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+body a {
+    text-decoration: none;
+}
+
+footer {
+    display: flex;
+    align-items: center;
+    border: 1px solid red;
+}
+
+footer a {
+    text-decoration: none;
+}
+
+.logo {
+    height: 100px;
+    width: 100px;
+}
