@@ -35,3 +35,21 @@ footer a {
     height: 100px;
     width: 100px;
 }
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+.fade-out {
+    animation: fadeOut 5s;
+}
+
+.field-validation-error {
+    color: #e01d1d;
+}

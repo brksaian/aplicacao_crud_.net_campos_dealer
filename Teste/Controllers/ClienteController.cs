@@ -13,7 +13,16 @@ namespace Teste.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            if (TempData["ErrorMessage"] != null)
+            {
+                ViewData["ErrorMessage"] = TempData["ErrorMessage"];
+            }
+            if (TempData["SuccessMessage"] != null)
+            {
+                ViewData["SuccessMessage"] = TempData["SuccessMessage"];
+            }
+            List<ClienteModel> clientes = _clienteRepositorio.ListarTodos();
+            return View(clientes);
         }
 
         public IActionResult Criar()
@@ -25,18 +34,101 @@ namespace Teste.Controllers
         public IActionResult Criar(ClienteModel cliente)
         {
             // Chama o repositório para gravar o cliente no banco de dados
-            _clienteRepositorio.Adicionar(cliente);
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _clienteRepositorio.Adicionar(cliente);
+                    TempData["SuccessMessage"] = "Cliente adicionado com sucesso!";
+                }else
+                {
+                    return View(cliente);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+            }
             return RedirectToAction("Index");
         }
 
-        public IActionResult Editar()
+        public IActionResult Editar(int Id)
         {
-            return View();
+            try
+            {
+                ClienteModel cliente = _clienteRepositorio.BuscarId(Id);
+
+                if (cliente == null)
+                {
+                    TempData["ErrorMessage"] = "Cliente não encontrado";
+                    return RedirectToAction("Index");
+                }
+
+                return View(cliente);
+            }
+            catch (System.Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+                return RedirectToAction("Index");
+            }
         }
 
-        public IActionResult ApagarConfirmacao()
+        [HttpPost]
+        public IActionResult Editar(ClienteModel cliente)
         {
-            return View();
+            // Chama o repositório para gravar o cliente no banco de dados
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _clienteRepositorio.Editar(cliente);
+                    TempData["SuccessMessage"] = "Cliente atualizado com sucesso!";
+                }
+                else
+                {
+                    return View(cliente);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+            }
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult ApagarConfirmacao(int Id)
+        {
+            try
+            {
+                ClienteModel cliente = _clienteRepositorio.BuscarId(Id);
+
+                if (cliente == null)
+                {
+                    TempData["ErrorMessage"] = "Cliente não encontrado";
+                    return RedirectToAction("Index");
+                }
+
+                return View(cliente);
+            }
+            catch (System.Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+                return RedirectToAction("Index");
+            }
+        }
+
+        public IActionResult Apagar(int Id)
+        {
+            // Chama o repositório para apagar o cliente no banco de dados
+            try
+            {
+                _clienteRepositorio.Remover(Id);
+                TempData["SuccessMessage"] = "Cliente removido com sucesso!";
+            }catch (System.Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+            }
+            return RedirectToAction("Index");
         }
     }
 }
