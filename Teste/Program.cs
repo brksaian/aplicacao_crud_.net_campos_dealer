@@ -2,7 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Teste.Data;
 using Teste.Repositorio.Cliente;
+using Teste.Repositorio.DetalheVenda;
 using Teste.Repositorio.Produto;
+using Teste.Repositorio.Vendas;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<BancoContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("DataBase")));
 builder.Services.AddScoped<IClienteRepositorio, ClienteRepositorio>();
 builder.Services.AddScoped<IProdutoRepositorio, ProdutoRepositorio>();
+builder.Services.AddScoped<IVendasRepositorio, VendasRepositorio>();
+builder.Services.AddScoped<IDetalheVendaRepositorio, DetalheVendaRepositorio>();
 
 var app = builder.Build();
 

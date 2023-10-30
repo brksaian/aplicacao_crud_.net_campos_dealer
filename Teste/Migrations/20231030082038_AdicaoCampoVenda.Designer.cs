@@ -12,8 +12,8 @@ using Teste.Data;
 namespace Teste.Migrations
 {
     [DbContext(typeof(BancoContext))]
-    [Migration("20231030032516_CriandoTabelasProduto_Venda")]
-    partial class CriandoTabelasProduto_Venda
+    [Migration("20231030082038_AdicaoCampoVenda")]
+    partial class AdicaoCampoVenda
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -64,6 +64,9 @@ namespace Teste.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("idVenda")
+                        .HasColumnType("int");
+
+                    b.Property<int>("qtdVenda")
                         .HasColumnType("int");
 
                     b.Property<float>("vlrUnitarioVenda")

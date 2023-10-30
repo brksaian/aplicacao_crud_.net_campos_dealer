@@ -53,3 +53,7 @@ footer a {
 .field-validation-error {
     color: #e01d1d;
 }
+
+.list-group {
+    list-style: none;
+}

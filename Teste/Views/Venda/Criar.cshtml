@@ -1,0 +1,248 @@
+﻿@model VendaModel
+@{
+    ViewData["Title"] = "Cadastro de Vendas";
+    var clientes = ViewData["Clientes"] as List<ClienteModel>;
+    var produtos = ViewData["Produtos"] as List<ProdutoModel>;
+}
+
+<div class="">
+    <h1 class="display-5">Cadastrar venda</h1>
+    <form class="justify-content-md-start" asp-controller="Venda" asp-action="Criar" method="post">
+        <div class="mb-3">
+            <div class="form-group">
+                <label for="clienteDropdown">Selecione um Cliente:</label>
+                <select class="form-control" id="clienteDropdown" name="clienteId" asp-for="idCliente">
+                    <option value="">Selecione um cliente</option>
+                    @foreach (var cliente in clientes)
+                    {
+                        <option value="@cliente.Id">@cliente.Nome</option>
+                    }
+                </select>
+            </div>
+
+            @Html.ValidationMessageFor(x => x.Cliente)
+        </div>
+        <div class="mb-3">
+            <div class="mb-3">
+                <label for="produtoDropdown">Selecione um Produto:</label>
+                <select class="form-control" id="produtoDropdown" name="produtoId">
+                    <option value="">Selecione um produto</option>
+                    @foreach (var produto in produtos)
+                    {
+                        <option value="@produto.idProduto" data-valor="@produto.vlrUnitario.ToString("F2")">@produto.dscProduto - R$ @produto.vlrUnitario</option>
+                    }
+                </select>
+
+            </div>
+            <div class="mb-3">
+                <label for="quantidade" class="form-label">Quantidade:</label>
+                <input type="number" class="form-control" id="quantidade" name="quantidade" placeholder="Digite a quantidade">
+            </div>
+            <button type="button" class="btn btn-success" id="adicionarProduto">Adicionar Produto</button>
+
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th>Valor Unitário</th>
+                        <th>Valor Multiplicado</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="listaProdutos">
+                </tbody>
+            </table>
+
+        </div>
+        <button type="submit" id="cadastrarButton" class="btn btn-primary">Cadastrar</button>
+        <button class="btn btn-secondary" asp-controller="Venda" asp-action="Index" role="button">Cancelar</button>
+    </form>
+</div>
+<script>
+    var itemEditIndex = -1;
+
+    function editarItem(index) {
+        itemEditIndex = index;
+        var detalheVenda = window.vendaModel.DetalhesVenda[index];
+        document.getElementById('produtoDropdown').value = detalheVenda.idProduto;
+        document.getElementById('quantidade').value = detalheVenda.qtdVenda;
+
+        var adicionarProdutoButton = document.getElementById('adicionarProduto');
+        adicionarProdutoButton.innerText = 'Salvar Edição';
+        adicionarProdutoButton.onclick = salvarEdicao;
+    }
+
+    function salvarEdicao() {
+        var produtoDropdown = document.getElementById('produtoDropdown');
+        var quantidadeInput = document.getElementById('quantidade');
+        var produtoOption = produtoDropdown.options[produtoDropdown.selectedIndex];
+        var produtoId = produtoDropdown.value;
+        var quantidade = parseFloat(quantidadeInput.value);
+
+        if (!produtoId || isNaN(quantidade) || quantidade <= 0) {
+            alert('Selecione um produto válido e insira uma quantidade válida.');
+            return;
+        }
+
+        var valorUnitario = parseFloat(produtoOption.getAttribute('data-valor').replace(',', '.'));
+        var valorMultiplicado = quantidade * valorUnitario;
+
+        var detalheVenda = window.vendaModel.DetalhesVenda[itemEditIndex];
+        detalheVenda.idProduto = produtoId;
+        detalheVenda.qtdVenda = quantidade;
+        detalheVenda.vlrUnitarioVenda = valorUnitario;
+
+        var listaProdutos = document.getElementById('listaProdutos').rows;
+        var row = listaProdutos[itemEditIndex + 1];
+        row.cells[0].innerHTML = produtoOption.text;
+        row.cells[1].innerHTML = quantidade;
+        row.cells[2].innerHTML = valorUnitario.toFixed(2);
+        row.cells[3].innerHTML = valorMultiplicado.toFixed(2);
+
+        var adicionarProdutoButton = document.getElementById('adicionarProduto');
+        adicionarProdutoButton.innerText = 'Adicionar Produto';
+        adicionarProdutoButton.onclick = adicionarProduto;
+
+        produtoDropdown.value = '';
+        quantidadeInput.value = '';
+
+        itemEditIndex = -1;
+    }
+
+    function adicionarProduto() {
+        var produtoDropdown = document.getElementById('produtoDropdown');
+        var quantidadeInput = document.getElementById('quantidade');
+        var produtoOption = produtoDropdown.options[produtoDropdown.selectedIndex];
+        var produtoId = produtoDropdown.value;
+        var quantidade = parseFloat(quantidadeInput.value);
+
+        if (!produtoId || isNaN(quantidade) || quantidade <= 0) {
+            alert('Selecione um produto válido e insira uma quantidade válida.');
+            return;
+        }
+
+        var valorUnitario = parseFloat(produtoOption.getAttribute('data-valor').replace(',', '.'));
+        var valorMultiplicado = quantidade * valorUnitario;
+
+        var listaProdutos = document.getElementById('listaProdutos');
+        var newRow = listaProdutos.insertRow(-1);
+        var cell1 = newRow.insertCell(0);
+        var cell2 = newRow.insertCell(1);
+        var cell3 = newRow.insertCell(2);
+        var cell4 = newRow.insertCell(3);
+        var cell5 = newRow.insertCell(4);
+
+        cell1.innerHTML = produtoOption.text;
+        cell2.innerHTML = quantidade;
+        cell3.innerHTML = valorUnitario.toFixed(2);
+        cell4.innerHTML = valorMultiplicado.toFixed(2);
+
+        var editarButton = document.createElement('button');
+        editarButton.innerText = 'Editar';
+        editarButton.onclick = function () {
+            editarItem(newRow.rowIndex - 1);
+        };
+
+        var removerButton = document.createElement('button');
+        removerButton.innerText = 'Remover';
+        removerButton.onclick = function () {
+            removerItem(newRow.rowIndex - 1);
+        };
+
+        cell5.appendChild(editarButton);
+        cell5.appendChild(removerButton);
+
+        produtoDropdown.value = '';
+        quantidadeInput.value = '';
+
+        var detalheVenda = {
+            text: produtoOption.text,
+            idProduto: produtoId,
+            qtdVenda: quantidade,
+            vlrUnitarioVenda: valorUnitario
+        };
+
+        if (typeof window.vendaModel === 'undefined') {
+            window.vendaModel = {
+                DetalhesVenda: []
+            };
+        }
+
+        window.vendaModel.DetalhesVenda.push(detalheVenda);
+
+        console.log(window.vendaModel);
+    }
+
+    function removerItem(index) {
+        window.vendaModel.DetalhesVenda.splice(index, 1);
+        atualizarListaProdutos();
+    }
+
+    function atualizarListaProdutos() {
+        var listaProdutos = document.getElementById('listaProdutos');
+        listaProdutos.innerHTML = ''; // Limpa a tabela
+
+        window.vendaModel.DetalhesVenda.forEach(function (detalhe, index) {
+            var newRow = listaProdutos.insertRow(-1);
+            var cell1 = newRow.insertCell(0);
+            var cell2 = newRow.insertCell(1);
+            var cell3 = newRow.insertCell(2);
+            var cell4 = newRow.insertCell(3);
+            var cell5 = newRow.insertCell(4);
+
+            cell1.innerHTML = detalhe.text;
+            cell2.innerHTML = detalhe.qtdVenda;
+            cell3.innerHTML = detalhe.vlrUnitarioVenda.toFixed(2);
+            cell4.innerHTML = (detalhe.qtdVenda * detalhe.vlrUnitarioVenda).toFixed(2);
+
+            var editarButton = document.createElement('button');
+            editarButton.innerText = 'Editar';
+            editarButton.onclick = function () {
+                editarItem(index);
+            };
+
+            var removerButton = document.createElement('button');
+            removerButton.innerText = 'Remover';
+            removerButton.onclick = function () {
+                removerItem(index);
+            };
+
+            cell5.appendChild(editarButton);
+            cell5.appendChild(removerButton);
+        });
+    }
+
+    document.getElementById('adicionarProduto').addEventListener('click', adicionarProduto);
+
+    document.getElementById('cadastrarButton').addEventListener('click', function () {
+        var clienteId = document.getElementById('clienteDropdown').value;
+        var vendaData = {
+            idCliente: clienteId,
+            detalhesVenda: window.vendaModel.DetalhesVenda
+        };
+
+        fetch('/Venda/Criar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(vendaData)
+        })
+            .then(data => {
+                if (data.success) {
+                    alert('Venda cadastrada com sucesso!');
+                } else {
+                    console.log(data.errorMessage);
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao enviar os dados para o controlador:', error);
+            })
+            .finally(() => {
+                window.location.href = '/Venda/Index';
+            });
+    });
+
+</script>

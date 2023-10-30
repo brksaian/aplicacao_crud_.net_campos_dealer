@@ -6,11 +6,25 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Teste.Migrations
 {
     /// <inheritdoc />
-    public partial class CriandoTabelasProduto_Venda : Migration
+    public partial class AdicaoCampoVenda : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Clientes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Cidade = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Clientes", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Produtos",
                 columns: table => new
@@ -54,11 +68,12 @@ namespace Teste.Migrations
                 {
                     idDetalheVenda = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    idVenda = table.Column<int>(type: "int", nullable: false),
                     idProduto = table.Column<int>(type: "int", nullable: false),
                     vlrUnitarioVenda = table.Column<float>(type: "real", nullable: false),
-                    VendaidVenda = table.Column<int>(type: "int", nullable: false),
-                    ProdutoidProduto = table.Column<int>(type: "int", nullable: false)
+                    qtdVenda = table.Column<int>(type: "int", nullable: false),
+                    ProdutoidProduto = table.Column<int>(type: "int", nullable: false),
+                    idVenda = table.Column<int>(type: "int", nullable: false),
+                    VendaidVenda = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -104,6 +119,9 @@ namespace Teste.Migrations
 
             migrationBuilder.DropTable(
                 name: "Vendas");
+
+            migrationBuilder.DropTable(
+                name: "Clientes");
         }
     }
 }

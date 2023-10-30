@@ -6,10 +6,11 @@ namespace Teste.Models
     {
         [Key] 
         public int idDetalheVenda { get; set; }
-        public int idVenda { get; set; }
         public int idProduto { get; set; }
         public float vlrUnitarioVenda { get; set; }
-        public VendaModel Venda { get; set; }
+        public int qtdVenda { get; set; }
         public ProdutoModel Produto { get; set; }
+        public int idVenda { get; set; }
+        public VendaModel Venda { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Teste.Models
 {
@@ -10,8 +12,7 @@ namespace Teste.Models
         public int qtdVenda { get; set; }
         public DateTime dthVenda { get; set; }
         public float vlrTotalVenda { get; set; }
-        public List<DetalheVendaModel> DetalhesVenda { get; set; }
+        public List<DetalheVendaModel> DetalhesVenda { get; set; } = new List<DetalheVendaModel>();
         public ClienteModel Cliente { get; set; }
-
     }
 }

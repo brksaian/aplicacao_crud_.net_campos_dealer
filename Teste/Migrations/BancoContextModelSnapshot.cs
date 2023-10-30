@@ -63,6 +63,9 @@ namespace Teste.Migrations
                     b.Property<int>("idVenda")
                         .HasColumnType("int");
 
+                    b.Property<int>("qtdVenda")
+                        .HasColumnType("int");
+
                     b.Property<float>("vlrUnitarioVenda")
                         .HasColumnType("real");
 

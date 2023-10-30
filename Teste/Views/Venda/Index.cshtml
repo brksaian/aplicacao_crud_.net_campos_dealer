@@ -1,0 +1,76 @@
+﻿@model List<VendaModel>
+@{
+    ViewData["Title"] = "Listagem de Vendas";
+}
+
+<div class="text-center">
+    @if (ViewData["ErrorMessage"] != null)
+    {
+        <div id="error-alert" class="position-fixed top-0 end-0 p-3" style="z-index: 1050">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @ViewData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+            </div>
+        </div>
+    }
+    @if (ViewData["SuccessMessage"] != null)
+    {
+        <div id="success-alert" class="position-fixed top-0 end-0 p-3" style="z-index: 1050">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @ViewData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+            </div>
+        </div>
+    }
+    <h1 class="display-5">Vendas</h1>
+
+    <div class="d-grid gap-2 d-md-flex justify-content-md-start pb-2">
+        <a class="btn btn-primary" role="button" asp-controller="Venda" asp-action="Criar">Novo Venda</a>
+    </div>
+    <table class="table table-hover" id="table">
+        <thead>
+            <tr>
+                <th scope="col">Cliente</th>
+                <th scope="col">Data da Venda</th>
+                <th scope="col">Detalhes da Venda</th>
+                <th scope="col">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (VendaModel venda in Model)
+                {
+                    <tr>
+                        <td>@venda.Cliente.Nome</td>
+                        <td>@venda.dthVenda</td>
+                        <td>
+                            <ul class="list-group">
+                                @if (venda.DetalhesVenda != null && venda.DetalhesVenda.Any())
+                                {
+                                    @foreach (DetalheVendaModel detalhe in venda.DetalhesVenda)
+                                    {
+                                        <li>@detalhe.Produto.dscProduto - Quantidade: @detalhe.qtdVenda</li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li>Nenhum detalhe encontrado</li>
+                                }
+
+                            </ul>
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a type="button" class="btn btn-primary" asp-controller="Venda" asp-action="Editar" asp-route-id="@venda.idVenda">Editar</a>
+                                <a type="button" class="btn btn-danger" asp-controller="Venda" asp-action="ApagarConfirmacao" asp-route-id="@venda.idVenda">Apagar</a>
+
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+</div>
