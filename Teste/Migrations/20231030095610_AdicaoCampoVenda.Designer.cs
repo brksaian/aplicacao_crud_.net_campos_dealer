@@ -12,7 +12,7 @@ using Teste.Data;
 namespace Teste.Migrations
 {
     [DbContext(typeof(BancoContext))]
-    [Migration("20231030082038_AdicaoCampoVenda")]
+    [Migration("20231030095610_AdicaoCampoVenda")]
     partial class AdicaoCampoVenda
     {
         /// <inheritdoc />

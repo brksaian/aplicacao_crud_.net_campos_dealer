@@ -15,6 +15,7 @@ builder.Services.AddScoped<IClienteRepositorio, ClienteRepositorio>();
 builder.Services.AddScoped<IProdutoRepositorio, ProdutoRepositorio>();
 builder.Services.AddScoped<IVendasRepositorio, VendasRepositorio>();
 builder.Services.AddScoped<IDetalheVendaRepositorio, DetalheVendaRepositorio>();
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
@@ -32,6 +33,17 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+    endpoints.MapControllerRoute(
+        name: "dados",
+        pattern: "dados/{action=Index}/{id?}",
+        defaults: new { controller = "Dados" });
+});
 
 app.MapControllerRoute(
     name: "default",
