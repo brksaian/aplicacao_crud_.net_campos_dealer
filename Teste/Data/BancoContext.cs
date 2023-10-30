@@ -10,5 +10,8 @@ namespace Teste.Data
         }
 
         public DbSet<ClienteModel> Clientes { get; set; }
+        public DbSet<ProdutoModel> Produtos{ get; set; }
+        public DbSet<VendaModel> Vendas { get; set; }
+        public DbSet<DetalheVendaModel> DetalheVendas { get; set; }
     }
 }

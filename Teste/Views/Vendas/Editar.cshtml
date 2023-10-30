@@ -1,0 +1,23 @@
+﻿@model ClienteModel
+@{
+    ViewData["Title"] = "Edição de Cliente";
+}
+
+<div class="">
+    <h1 class="display-5">Editar cliente</h1>
+    <form class="justify-content-md-start" asp-controller="Cliente" asp-action="Editar" method="post">
+        <input type="hidden" asp-for="Id" />
+        <div class="mb-3">
+            <label for="client-name" class="form-label">Nome</label>
+            <input type="text" asp-for="Nome" class="form-control" id="client-name" placeholder="Digite seu nome completo">
+            @Html.ValidationMessageFor(x => x.Nome)
+        </div>
+        <div class="mb-3">
+            <label for="client-city" class="form-label">Cidade</label>
+            <input type="text" asp-for="Cidade" class="form-control" id="client-city" placeholder="Digite o nome da cidade do cliente">
+            @Html.ValidationMessageFor(x => x.Cidade)
+        </div>
+        <button type="submit" class="btn btn-primary">Editar</button>
+        <button class="btn btn-secondary" asp-controller="Cliente" asp-action="Index" role="button">Cancelar</button>
+    </form>
+</div>

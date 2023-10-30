@@ -40,12 +40,13 @@ namespace Teste.Controllers
                 {
                     _clienteRepositorio.Adicionar(cliente);
                     TempData["SuccessMessage"] = "Cliente adicionado com sucesso!";
-                }else
+                }
+                else
                 {
                     return View(cliente);
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 TempData["ErrorMessage"] = ex.Message;
             }
@@ -66,7 +67,7 @@ namespace Teste.Controllers
 
                 return View(cliente);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 TempData["ErrorMessage"] = ex.Message;
                 return RedirectToAction("Index");
@@ -89,7 +90,7 @@ namespace Teste.Controllers
                     return View(cliente);
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 TempData["ErrorMessage"] = ex.Message;
             }
@@ -110,7 +111,7 @@ namespace Teste.Controllers
 
                 return View(cliente);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 TempData["ErrorMessage"] = ex.Message;
                 return RedirectToAction("Index");
@@ -124,7 +125,8 @@ namespace Teste.Controllers
             {
                 _clienteRepositorio.Remover(Id);
                 TempData["SuccessMessage"] = "Cliente removido com sucesso!";
-            }catch (System.Exception ex)
+            }
+            catch (Exception ex)
             {
                 TempData["ErrorMessage"] = ex.Message;
             }

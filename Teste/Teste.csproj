@@ -24,4 +24,9 @@
     <PackageReference Include="WakaTime.Shared.ExtensionUtils" Version="4.2.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Produto\" />
+    <Folder Include="Views\Vendas\" />
+  </ItemGroup>
+
 </Project>

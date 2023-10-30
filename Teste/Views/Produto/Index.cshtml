@@ -1,0 +1,57 @@
+﻿@model List<ProdutoModel>
+@{
+    ViewData["Title"] = "Listagem de Produtos";
+}
+
+<div class="text-center">
+    @if (ViewData["ErrorMessage"] != null)
+    {
+        <div id="error-alert" class="position-fixed top-0 end-0 p-3" style="z-index: 1050">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @ViewData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+            </div>
+        </div>
+    }
+    @if (ViewData["SuccessMessage"] != null)
+    {
+        <div id="success-alert" class="position-fixed top-0 end-0 p-3" style="z-index: 1050">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @ViewData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+            </div>
+        </div>
+    }
+    <h1 class="display-5">Produtos</h1>
+
+    <div class="d-grid gap-2 d-md-flex justify-content-md-start pb-2">
+        <a class="btn btn-primary" role="button" asp-controller="Produto" asp-action="Criar">Novo Produto</a>
+    </div>
+    <table class="table table-hover" id="tableProducts">
+        <thead>
+            <tr>
+                <th scope="col">Descrição</th>
+                <th scope="col">Valor</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if(Model != null && Model.Any())
+            {
+                foreach(ProdutoModel produto in Model)
+                {
+                    <tr>
+                        <td>@produto.dscProduto</td>
+                        <td>@produto.vlrUnitario</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a type="button" class="btn btn-primary" asp-controller="Produto" asp-action="Editar" asp-route-id="@produto.idProduto">Editar</a>
+                                <a type="button" class="btn btn-danger" asp-controller="Produto" asp-action="ApagarConfirmacao" asp-route-id="@produto.idProduto">Apagar</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
